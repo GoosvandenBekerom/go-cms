@@ -1,6 +1,7 @@
 package domain
 
 type Page struct {
+	Path     string
 	Template PageTemplate
 }
 

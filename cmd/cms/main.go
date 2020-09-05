@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/GoosvandenBekerom/go-cms/pkg/database"
 	"github.com/GoosvandenBekerom/go-cms/pkg/domain"
-	"github.com/GoosvandenBekerom/go-cms/pkg/templates"
 	"html/template"
 	"log"
 	"net/http"
@@ -11,20 +11,15 @@ import (
 )
 
 func main() {
-	handlePath("/", domain.Page{Template: templates.BasicTemplate{
-		Title:   "Homepage",
-		Content: "This is the homepage using the basic template",
-	}})
-	handlePath("/test", domain.Page{Template: templates.BasicTemplate{
-		Title:   "Test Page",
-		Content: "This is a test page using the basic template",
-	}})
+	for _, page := range database.GetAllPages() {
+		handle(page)
+	}
 	log.Println("Starting webserver on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func handlePath(path string, page domain.Page) {
-	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+func handle(page domain.Page) {
+	http.HandleFunc(page.Path, func(w http.ResponseWriter, r *http.Request) {
 		t, parseError := template.ParseFiles(getHtmlTemplate(page.Template.HtmlFilePath()))
 
 		if parseError != nil {
