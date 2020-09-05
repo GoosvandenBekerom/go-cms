@@ -1,0 +1,5 @@
+# GoLand configuration files
+.idea/
+
+# Windows build executables
+*.exe
