@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: cms
+      POSTGRES_PASSWORD: cms
+      POSTGRES_DB: cms
+    restart: always
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
