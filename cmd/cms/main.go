@@ -20,13 +20,13 @@ func main() {
 
 func handle(page domain.Page) {
 	http.HandleFunc(page.Path, func(w http.ResponseWriter, r *http.Request) {
-		t, parseError := template.ParseFiles(getHtmlTemplate(page.Template.HtmlFilePath()))
+		t, parseError := template.ParseFiles(getHtmlTemplate(page.Content.HtmlFilePath()))
 
 		if parseError != nil {
 			log.Println(parseError)
 		}
 
-		execError := t.Execute(w, page.Template)
+		execError := t.Execute(w, page.Content)
 
 		if execError != nil {
 			log.Println(execError)

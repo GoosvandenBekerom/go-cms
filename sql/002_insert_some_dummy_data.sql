@@ -1,0 +1,2 @@
+INSERT INTO pages (path, template_type, content) VALUES ('/', 'BASIC', '{"Title":"Homepage","Content":"This is the homepage using the basic template"}');
+INSERT INTO pages (path, template_type, content) VALUES ('/test', 'INFO', '{"Title":"Test Page","Source":"https://www.google.com","Content":"This is a test page using the info template"}');
