@@ -1,11 +1,11 @@
-package domain
+package pages
 
 import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/GoosvandenBekerom/go-cms/pkg/domain/templates"
+	"github.com/GoosvandenBekerom/go-cms/pkg/pages/templates"
 	"strings"
 )
 
@@ -22,6 +22,17 @@ func (t TemplateType) String() string {
 		"BASIC",
 		"INFO",
 	}[t]
+}
+
+func GetTemplateTypeFromString(typeString string) (TemplateType, error) {
+	switch strings.ToUpper(typeString) {
+	case "BASIC":
+		return BASIC, nil
+	case "INFO":
+		return INFO, nil
+	default:
+		return -1, errors.New(fmt.Sprintf("unknown type received: %s", typeString))
+	}
 }
 
 // find the correct template for this TemplateType and parse the raw json content into it
@@ -44,15 +55,13 @@ func (t TemplateType) ParseJsonContent(raw json.RawMessage) (PageTemplate, error
 func (t *TemplateType) Scan(value interface{}) error {
 	stringValue := value.(string)
 
-	switch strings.ToUpper(stringValue) {
-	case "BASIC":
-		*t = BASIC
-	case "INFO":
-		*t = INFO
-	default:
-		return errors.New(fmt.Sprintf("unknown type received: %s", stringValue))
+	templateType, err := GetTemplateTypeFromString(stringValue)
+
+	if err != nil {
+		return err
 	}
 
+	*t = templateType
 	return nil
 }
 
