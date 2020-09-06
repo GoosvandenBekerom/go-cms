@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/GoosvandenBekerom/go-cms/pkg/config"
 	. "github.com/GoosvandenBekerom/go-cms/pkg/pages"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
@@ -12,22 +13,16 @@ import (
 	"log"
 )
 
-const (
-	host     string = "localhost"
-	port     int    = 5432
-	username string = "cms"
-	password string = "cms"
-	dbname   string = "cms"
-)
-
 func connect() *pgxpool.Pool {
+	dbConfig := config.Get().Database
+
 	connectionString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, username, password, dbname)
+		dbConfig.Host, dbConfig.Port, dbConfig.Username, dbConfig.Password, dbConfig.Dbname)
 
 	connectionPool, err := pgxpool.Connect(context.Background(), connectionString)
 
 	if err != nil {
-		log.Fatalf("Unable to connect to databse: %s", err)
+		log.Fatalf("Unable to connect to database: %s", err)
 	}
 
 	return connectionPool
